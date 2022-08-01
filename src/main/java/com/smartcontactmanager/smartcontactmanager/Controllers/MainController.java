@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.smartcontactmanager.smartcontactmanager.Dao.ContactRepo;
@@ -29,6 +32,57 @@ public class MainController {
         model.addAttribute("title","Home-SmartContactManager");
         return "index";
     }
+
+    @GetMapping("/about")
+    public String about(Model model)
+    {
+        model.addAttribute("title","About-SmartContactManager");
+        return "about";
+    }
+
+    @GetMapping("/login")
+    public String login(Model model)
+    {
+        model.addAttribute("title","Login-SmartContactManager");
+        return "login";
+    }
+
+    @GetMapping("/signup")
+    public String signup(Model model)
+    {
+        model.addAttribute("title","Signup-SmartContactManager");
+        model.addAttribute("user", new User());
+        return "signup";
+    }
+
+    @PostMapping("/do_registration")
+    public String regisration(@ModelAttribute("user") User user,
+                              @RequestParam(value="repeat_password",defaultValue = "pass" ) String repeat_password,
+                              @RequestParam(value="aggrement",defaultValue = "false" ) boolean aggrement)
+                              {
+                                userRepo.save(user);
+                                System.out.println("Aggrement "+ aggrement);
+                                return "index";
+                              }
+                              
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     @GetMapping("/test")
     @ResponseBody
     public String test()
@@ -47,7 +101,7 @@ public class MainController {
         "mother",true);
         
        /// Contact c3=new Contact();
-       // user.setContacts(contacts);
+        user.setContacts(contacts);
         userRepo.save(user);  
         //contactRepo.save(c1);   
         return "test is done";
