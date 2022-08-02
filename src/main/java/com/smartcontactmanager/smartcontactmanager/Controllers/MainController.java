@@ -3,6 +3,9 @@ package com.smartcontactmanager.smartcontactmanager.Controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
+import org.aspectj.bridge.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +19,7 @@ import com.smartcontactmanager.smartcontactmanager.Dao.ContactRepo;
 import com.smartcontactmanager.smartcontactmanager.Dao.UserRepo;
 import com.smartcontactmanager.smartcontactmanager.Entities.Contact;
 import com.smartcontactmanager.smartcontactmanager.Entities.User;
+import com.smartcontactmanager.smartcontactmanager.Helper.Messages;
 
 import ch.qos.logback.classic.sift.SiftAction;
 
@@ -58,11 +62,43 @@ public class MainController {
     @PostMapping("/do_registration")
     public String regisration(@ModelAttribute("user") User user,
                               @RequestParam(value="repeat_password",defaultValue = "pass" ) String repeat_password,
-                              @RequestParam(value="aggrement",defaultValue = "false" ) boolean aggrement)
+                              @RequestParam(value="aggrement",defaultValue = "false" ) boolean aggrement,HttpSession session,Model model)
                               {
-                                userRepo.save(user);
-                                System.out.println("Aggrement "+ aggrement);
-                                return "index";
+                                try{
+                                    if(!aggrement)
+                                    {
+                                        throw new Exception("You have not agreed to the terms and conditions");
+
+                                    }
+
+                                    if(!user.getPassword().equals(repeat_password))
+                                    {
+                                        throw new Exception("Your password does not match");
+
+                                    }
+                                    user.setImageUrl("default.jpg");
+                                    user.setRole("ROLE_USER");
+                                    user.setStatus(true);
+
+
+                                    User userResult=userRepo.save(user);
+                                    model.addAttribute("user", new User());
+                                    session.setAttribute("message",
+                                              new Messages("Succesfully Registered! ", "alert-success"));
+                                
+                                    System.out.println("Aggrement "+ aggrement);
+                                    System.out.println(user);
+                                    return "signup";
+                                }
+                                catch(Exception e)
+                                {
+                                    e.printStackTrace();
+                                    model.addAttribute("user",user);
+                                    session.setAttribute("message",
+                                              new Messages("Something went wrong ! "+e.getMessage(), "alert-danger"));
+                                    return "signup";
+                                }
+                                
                               }
                               
 

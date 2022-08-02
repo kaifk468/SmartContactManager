@@ -16,6 +16,18 @@
                   <div class="row justify-content-center">
                     <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
       
+                      <!-- dissmisible alert for signup  -->
+                      <div  th:if="${session.message}" th:classappend="${session.message.type}" class="alert alert-dismissible fade show" role="alert">
+                        <p th:text="${session.message.content}"></p>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <th:block th:text="${#session.removeAttribute('message')}"></th:block>
+                      </div>
+
+
+                      <!-- <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <strong>Holy guacamole!</strong> You should check in on some of those fields below.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                      </div> -->
                       <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
       
                       <form class="mx-1 mx-md-4" th:action="@{/do_registration}" method="post" th:object="${user}">
