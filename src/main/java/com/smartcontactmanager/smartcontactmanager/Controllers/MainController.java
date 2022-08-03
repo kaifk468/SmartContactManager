@@ -7,11 +7,13 @@ import javax.servlet.http.HttpSession;
 
 import org.aspectj.bridge.Message;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -29,6 +31,8 @@ public class MainController {
     UserRepo userRepo;
     @Autowired
     ContactRepo contactRepo;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @GetMapping("/")
     public String home(Model model)
@@ -79,6 +83,7 @@ public class MainController {
                                     user.setImageUrl("default.jpg");
                                     user.setRole("ROLE_USER");
                                     user.setStatus(true);
+                                    user.setPassword(passwordEncoder.encode(user.getPassword()));
 
 
                                     User userResult=userRepo.save(user);
@@ -102,6 +107,13 @@ public class MainController {
                               }
                               
 
+    @RequestMapping("/do_login")
+    public String login()
+    {
+
+
+        return "kk";
+    }
 
 
 
@@ -111,10 +123,7 @@ public class MainController {
 
 
 
-
-
-
-
+ 
 
 
 
