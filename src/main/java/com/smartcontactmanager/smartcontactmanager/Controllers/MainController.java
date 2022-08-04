@@ -112,7 +112,7 @@ public class MainController {
     {
 
 
-        return "kk";
+        return "user/index";
     }
 
 

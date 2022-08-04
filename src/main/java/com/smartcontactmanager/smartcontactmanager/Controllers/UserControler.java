@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/user")
 public class UserControler {
 
-    @RequestMapping("index")
+    @RequestMapping("/index")
     public String userIndex()
     {
         return "user/index";

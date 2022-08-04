@@ -44,7 +44,7 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
  
     http.authorizeRequests().antMatchers("/admin/**").hasRole("ADMIN").
     antMatchers("/user/**").hasRole("USER").antMatchers("/**").
-    permitAll().and().formLogin().and().csrf().disable();
+    permitAll().and().formLogin().loginPage("/login").and().csrf().disable();
 
     http.formLogin().defaultSuccessUrl("/user/index");
     
