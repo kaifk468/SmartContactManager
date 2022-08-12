@@ -33,18 +33,23 @@ public class Contact {
         this.name = name;
     }
     
-    public Contact(int id, String name, String email, String phone, String image, String work, String desc) {
+    public Contact(int id, String name, String email, String phone, String image, String work) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.phone = phone;
         this.image = image;
         this.work = work;
-        this.description = desc;
+      
     }
 
 
-    
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    public String getDescription() {
+        return description;
+    }
     public String getEmail() {
         return email;
     }
@@ -69,12 +74,7 @@ public class Contact {
     public void setWork(String work) {
         this.work = work;
     }
-    public String getDesc() {
-        return description;
-    }
-    public void setDesc(String desc) {
-        this.description = desc;
-    }
+    
     public int getId() {
         return id;
     }
@@ -93,6 +93,12 @@ public class Contact {
     public void setUser(User user) {
         this.user = user;
     }
+    @Override
+    public String toString() {
+        return "Contact [description=" + description + ", email=" + email + ", id=" + id + ", image=" + image
+                + ", name=" + name + ", phone=" + phone + ", user=" + user + ", work=" + work + "]";
+    }
+    
      
     
    

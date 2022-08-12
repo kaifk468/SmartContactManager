@@ -11,10 +11,7 @@ import com.smartcontactmanager.smartcontactmanager.Entities.User;
 @Component
 public interface UserRepo  extends JpaRepository<User,Integer>{
 
-    /**
-     * @param email
-     * @return
-     */
+ 
     @Query("select u from User u where u.email=:email")
     public User getUserByUserName(@Param("email")String email);
     
