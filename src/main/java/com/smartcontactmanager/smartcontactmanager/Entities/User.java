@@ -126,7 +126,17 @@ public class User {
         return "User [contacts=" + contacts + ", email=" + email + ", id=" + id + ", imageUrl=" + imageUrl + ", name="
                 + name + ", password=" + password + ", role=" + role + ", status=" + status + "]";
     }
-     
+    
+
+
+    
+
+
+
+    
+
+
+   
     
 
     

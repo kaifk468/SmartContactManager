@@ -1,0 +1,66 @@
+<!doctype html>
+<html class="no-js" lang="" xmlns:th="http://www.thymeLeaf.org"  th:replace="user/base::Layout(~{::section})">
+   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+   <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <title>Form Page</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      </head>
+   <body>
+      <section>
+        <div class="container">
+            <div class="row">
+              <div class="col-12">
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th scope="col">Day</th>
+                      <th scope="col">Contacts</th>
+                      <th scope="col">Number</th>
+                      <th scope="col">Email</th>
+                      <th scope="col">Work</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr th:each="c:${contacts}">
+                      <th scope="row">1</th>
+                      <td>
+                        <a th:href="@{'/user/contact/'+${c.id}}">
+                        <img class="contact_profile_pic" alt="profile.pic" th:src="@{'/images/'+${c.image}}">
+                        <span th:text="${c.name}"></span></a></td>
+                      <td><span th:text="${c.phone}"></span></td>
+                      <td><span th:text="${c.email}"></span></td>
+                      <td><span th:text="${c.work}"></span></td>
+                      
+                      <td>
+                        <button type="button" class="btn btn-primary btn-sm">Show </button>
+                        <button type="button" class="btn btn-success btn-sm">Update</button>
+                      <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                      </td>
+                    </tr>
+                    
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <nav aria-label="...">
+              <ul class="pagination">
+                <li class="page-item" th:classappend="${currPage==0?'disabled':''}">
+                  <a class="page-link" th:href="@{'/user/show_contacts/'+${currPage-1}}" tabindex="-1">Previous</a>
+
+                <li th:classappend="${currPage==i-1?'active':''}" th:each="i:${#numbers.sequence(1,totalPage)}" class="page-item">
+                  <a class="page-link" th:href="@{'/user/show_contacts/'+${i-1}}">
+                  <span th:text="${i}"></span>
+                </a></li>
+
+                <li class="page-item" th:classappend="${currPage==totalPage-1?'disabled':''}">
+                  <a class="page-link" th:href="@{'/user/show_contacts/'+${currPage+1}}">Next</a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+     </section>
+    
+   </body>
+</html>
