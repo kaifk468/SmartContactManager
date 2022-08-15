@@ -34,9 +34,9 @@
                       <td><span th:text="${c.work}"></span></td>
                       
                       <td>
-                        <button type="button" class="btn btn-primary btn-sm">Show </button>
-                        <button type="button" class="btn btn-success btn-sm">Update</button>
-                      <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                        <a th:href="@{'/user/contact/'+${c.id}}" class="btn btn-primary btn-sm">Show </a>
+                        <a th:href="@{'/user/update/'+${c.id}}" class="btn btn-success btn-sm">Update</a>
+                      <a th:href="@{'/user/delete/'+${c.id}}" class="btn btn-danger btn-sm">Delete</a>
                       </td>
                     </tr>
                     

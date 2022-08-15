@@ -9,7 +9,7 @@ public class SmartcontactmanagerApplication {
 	
 	public static void main(String[] args) {
 		SpringApplication.run(SmartcontactmanagerApplication.class, args);
-		System.out.println("system is running soothly");
+		System.out.println("system is running soothly ////////////////////////////////////////////////////");
 	}
 
 }

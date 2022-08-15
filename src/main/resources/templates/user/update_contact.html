@@ -11,14 +11,14 @@
       <section>
          <div class="container align-content-center">
 
-            <form class=" form-horizontal align-content-center" th:action="@{/user/add_contact_db}"
+            <form class=" form-horizontal align-content-center" th:action="@{'/user/update_contact_db/'+${contact.id}}"
              method="post" enctype="multipart/form-data" th:object="${contact}">
              
           
                 <!-- Form Name -->
                 <legend>
                   <center>
-                    <h2><b>Add Your Contacts</b></h2>
+                    <h2><b>Update Your Contacts</b></h2>
                   </center>
                 </legend><br>
           
@@ -29,7 +29,7 @@
                   <div class="col-md-4 inputGroupContainer">
                     <div class="input-group">
                       <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                      <input name="name" placeholder="Contact Name" class="form-control" type="text">
+                      <input name="name" th:value="${contact.name}" placeholder="Contact Name" class="form-control" type="text">
                     </div>
                   </div>
                 </div>
@@ -41,7 +41,7 @@
                   <div class="col-md-4 inputGroupContainer">
                     <div class="input-group">
                       <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                      <input name="phone" placeholder="Contact Phone No." class="form-control" type="tel">
+                      <input name="phone" th:value="${contact.phone}" placeholder="Contact Phone No." class="form-control" type="tel">
                       
                     </div>
                   </div>
@@ -53,7 +53,7 @@
                   <div class="col-md-4 inputGroupContainer">
                     <div class="input-group">
                       <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                      <input name="email" placeholder="Contact Email" class="form-control" type="text">
+                      <input name="email" th:value="${contact.email}" placeholder="Contact Email" class="form-control" type="text">
                     </div>
                   </div>
                 </div>
@@ -65,7 +65,7 @@
                   <div class="col-md-4 inputGroupContainer">
                     <div class="input-group">
                       <span class="input-group-addon"><i class="glyphicon glyphicon-earphone"></i></span>
-                      <input name="profilePic" class="form-control" type="file">
+                      <input name="profilePic"  class="form-control" type="file">
                     </div>
                   </div>
                 </div>
@@ -77,7 +77,7 @@
                   <div class="col-md-4 inputGroupContainer">
                     <div class="input-group">
                       <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                      <input name="work" placeholder="Work" class="form-control" type="text">
+                      <input name="work" th:value="${contact.work}" placeholder="Work" class="form-control" type="text">
                     </div>
                   </div>
                 </div>
@@ -90,6 +90,7 @@
                       <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
                       
                       <textarea class="form-control" 
+                      th:text="${contact.description}"
                       name="description" 
                       id="exampleFormControlTextarea1"
                       placeholder="Description of Contact"

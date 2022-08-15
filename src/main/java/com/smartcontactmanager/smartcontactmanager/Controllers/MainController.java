@@ -55,6 +55,7 @@ public class MainController {
         return "login";
     }
 
+    //open Registration form for new user
     @GetMapping("/signup")
     public String signup(Model model)
     {
@@ -63,30 +64,44 @@ public class MainController {
         return "signup";
     }
 
+    //Registration process 
     @PostMapping("/do_registration")
     public String regisration(@ModelAttribute("user") User user,
                               @RequestParam(value="repeat_password",defaultValue = "pass" ) String repeat_password,
                               @RequestParam(value="aggrement",defaultValue = "false" ) boolean aggrement,HttpSession session,Model model)
                               {
                                 try{
+
+                                    User userByUserName = userRepo.getUserByUserName(user.getEmail());
+                                    //System.out.println(userByUserName.getEmail());
+                                    if(userByUserName.getEmail().equals(user.getEmail()))
+                                    {
+                                        throw new Exception("User already Exist");
+
+                                    }
+
                                     if(!aggrement)
                                     {
                                         throw new Exception("You have not agreed to the terms and conditions");
 
                                     }
-
+                                    //checking if the user is already registered or not
                                     if(!user.getPassword().equals(repeat_password))
                                     {
                                         throw new Exception("Your password does not match");
 
                                     }
+                                    
+                                    //setting some defautl properties
                                     user.setImageUrl("default.jpg");
                                     user.setRole("ROLE_USER");
                                     user.setStatus(true);
                                     user.setPassword(passwordEncoder.encode(user.getPassword()));
 
 
-                                    User userResult=userRepo.save(user);
+                                    User userResult=userRepo.save(user);//here we save new user to db
+
+                                    //setting attribute to send it to view page
                                     model.addAttribute("user", new User());
                                     session.setAttribute("message",
                                               new Messages("Succesfully Registered! ", "alert-success"));
@@ -105,8 +120,7 @@ public class MainController {
                                 }
                                 
                               }
-                              
-
+     ///opening login form                        
     @RequestMapping("/do_login")
     public String login()
     {

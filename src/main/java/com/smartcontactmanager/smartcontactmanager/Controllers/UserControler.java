@@ -63,7 +63,7 @@ public class UserControler {
         return "user/add_contact";
     }
 
-    // TO proccesing form contact to add to the databasse
+    // TO proccesing form contact to add the contact to the databasse
     @PostMapping("/add_contact_db")
     public String addContactDb(@ModelAttribute("contact")Contact contact,Model model
                               ,Principal principal,@RequestParam("profilePic") MultipartFile file
@@ -74,8 +74,8 @@ public class UserControler {
             String userName=principal.getName();//it wiil return email as userName
             User user=userRepo.getUserByUserName(userName);
             contact.setUser(user);
-            user.getContacts().add(contact);
-            // contactRepo.save(contact);
+           // user.getContacts().add(contact);
+             
           
             if(file.isEmpty())
             {
@@ -92,10 +92,10 @@ public class UserControler {
 
             }
 
-
-            userRepo.save(user);
+            contactRepo.save(contact);
+           // userRepo.save(user);
             model.addAttribute("contact", contact);
-            //System.out.println(contact);
+           
             return "user/add_contact";
 
         }
@@ -114,19 +114,13 @@ public class UserControler {
     public String show_contacts(@PathVariable("pageNo") Integer pageNo,Principal principal,Model model)
     {
         User user=userRepo.getUserByUserName(principal.getName());
-        //List<Contact> contacts=contactRepo.getContactsByUserId(user.getId());
        
-        /////
         Pageable paging = PageRequest.of(pageNo, 15);
         Page<Contact> pagedResult = contactRepo.getContactsByUserId(user.getId(),paging);
         
         model.addAttribute("contacts", pagedResult);
         model.addAttribute("currPage", pageNo);
         model.addAttribute("totalPage", pagedResult.getTotalPages());
-
-
-        /////
-        //System.out.println(contacts.size());
         return "user/show_contacts";
         
     }
@@ -138,8 +132,77 @@ public class UserControler {
         Optional<Contact> optionalContact = contactRepo.findById(contactId);
         Contact contact=optionalContact.get();
         model.addAttribute("contact", contact);
-       // System.out.print(contact);
         return "user/contact";
+    }
+
+    ///deleting user contact
+
+    @GetMapping("/delete/{cid}")
+    public String deletecContact(@PathVariable("cid")Integer contactId,Model model,HttpSession session)
+    {
+
+         Contact contact = contactRepo.findById(contactId).get();
+         contactRepo.delete(contact);
+         session.setAttribute("deleted", new Messages("Contacte Deleted", "success"));
+         System.out.println("delete contatac succesfully");
+
+        return "redirect:/user/show_contacts/0";
+    }
+
+    ///open new form to update user contact details
+    @GetMapping("/update/{cid}")
+    public String updateContactForm(@PathVariable("cid")Integer contactId,Model model)
+    {
+        Contact contact = contactRepo.findById(contactId).get();
+        model.addAttribute("contact", contact);
+        return "user/update_contact";
+    }
+
+    ///proccestin new updated contact details to the database
+    @PostMapping("/update_contact_db/{cid}")
+    public String updateContactDb(@PathVariable("cid")Integer contactId
+                              ,@ModelAttribute("contact")Contact contact,Model model
+                              ,Principal principal,@RequestParam("profilePic") MultipartFile file
+                              ,HttpSession session)
+                        
+    {
+        try{
+            contact.setId(contactId);
+            User userByUserName = userRepo.getUserByUserName(principal.getName());
+            contact.setUser(userByUserName);
+           // user.getContacts().add(contact);
+             
+          
+            if(file.isEmpty())
+            {
+                ///throw new Exception(new Messages("Something went wrong", "danger"));
+                //System.out.println("Somthing wint wrotn");
+                contact.setImage("contact.png");
+            }
+            else{
+                contact.setImage(file.getOriginalFilename());
+                File saveFile=new ClassPathResource("static/images").getFile();
+                Path path= Paths.get(saveFile.getAbsolutePath()+File.separator+file.getOriginalFilename());
+                Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+                System.out.println("file uploded");
+
+            }
+
+            contactRepo.save(contact);
+           // userRepo.save(user);
+            model.addAttribute("contact", contact);
+            System.out.println("contact updated");
+            return "redirect:/user/show_contacts/0";
+
+        }
+        catch(Exception e)
+        {
+            System.out.println("ERROR"+ e.getMessage());
+            e.printStackTrace();
+        
+        }
+
+        return "redirect:/user/show_contacts/0";
     }
     
 }
