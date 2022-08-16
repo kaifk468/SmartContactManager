@@ -10,6 +10,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.ManyToAny;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="Contacts")
 public class Contact {
@@ -25,6 +27,7 @@ public class Contact {
     private String description;
 
     @ManyToOne
+    @JsonIgnore
     User user;
     
     public Contact() {

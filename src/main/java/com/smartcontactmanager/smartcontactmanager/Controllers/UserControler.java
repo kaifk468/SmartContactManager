@@ -56,6 +56,7 @@ public class UserControler {
 
     }
 
+    // open add contact form
     @GetMapping("/add_contact")
     public String addContact()
     {
@@ -173,18 +174,26 @@ public class UserControler {
            // user.getContacts().add(contact);
              
           
+
+            Contact oldContact = contactRepo.findById(contactId).get();
             if(file.isEmpty())
             {
                 ///throw new Exception(new Messages("Something went wrong", "danger"));
                 //System.out.println("Somthing wint wrotn");
-                contact.setImage("contact.png");
+                 
+                 contact.setImage(oldContact.getImage());//setting old image as it is
             }
             else{
-                contact.setImage(file.getOriginalFilename());
-                File saveFile=new ClassPathResource("static/images").getFile();
-                Path path= Paths.get(saveFile.getAbsolutePath()+File.separator+file.getOriginalFilename());
-                Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+
+                contact.setImage(file.getOriginalFilename());//setting img name
+                File saveFile=new ClassPathResource("static/images").getFile();//getting the image folder 
+                Path path= Paths.get(saveFile.getAbsolutePath()+File.separator+file.getOriginalFilename());//finding the path of img
+                Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);//coping the pic to tar folder
                 System.out.println("file uploded");
+
+                //deleting the old pic
+                File file1=new File(saveFile,oldContact.getImage());
+                file1.delete();
 
             }
 
@@ -203,6 +212,16 @@ public class UserControler {
         }
 
         return "redirect:/user/show_contacts/0";
+    }
+
+    ////user profile 
+    @GetMapping("/profile")
+    public String profile(Model model ,Principal principal)
+    {
+        User profile=userRepo.getUserByUserName(principal.getName());
+        model.addAttribute("profile", profile);
+
+        return "user/profile";
     }
     
 }
