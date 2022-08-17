@@ -46,7 +46,7 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     antMatchers("/user/**").hasRole("USER").antMatchers("/**").
     permitAll().and().formLogin().loginPage("/login").and().csrf().disable();
 
-    http.formLogin().defaultSuccessUrl("/user/index");
+    http.formLogin().defaultSuccessUrl("/user/show_contacts/0");
     
     return http.build();
 }

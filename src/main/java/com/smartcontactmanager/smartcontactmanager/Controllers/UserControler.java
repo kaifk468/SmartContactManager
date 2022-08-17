@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.method.P;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,6 +43,9 @@ public class UserControler {
     UserRepo userRepo;
     @Autowired
     ContactRepo contactRepo;
+    @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder;
+
 
     @RequestMapping("/index")
     public String userIndex(Model model,Principal principal)
@@ -222,6 +226,48 @@ public class UserControler {
         model.addAttribute("profile", profile);
 
         return "user/profile";
+    }
+
+    //opining change password form
+    @GetMapping("/change_password")
+    public String openPassForm()
+    {
+        return "user/change_password";
+    }
+
+    //changing password
+    @PostMapping("/change_password_now")
+    public String changePassword(@RequestParam("old_password")String oldPassword,
+                                 @RequestParam("new_password")String newPassword,
+                                 @RequestParam("confirm_password")String confirmPassword,
+                                 Principal principal,HttpSession session)
+    {
+        User user=userRepo.getUserByUserName(principal.getName());
+        System.out.println(oldPassword+" "+newPassword+" "+confirmPassword);
+        Messages message= new Messages();
+        if(!newPassword.equals(confirmPassword))
+        {
+            message.setType("alert-danger");
+            message.setContent("New password does't match with confirm pass");
+            System.out.println("New password does't match with confirm pass");
+
+        }
+        else if(bCryptPasswordEncoder.matches(oldPassword, user.getPassword()))
+        {
+            user.setPassword(bCryptPasswordEncoder.encode(newPassword));
+            userRepo.save(user);
+            message.setType("alert-success");
+            message.setContent("New password change succesfully");
+            System.out.println("New password change succesfully");
+
+        }
+        else{
+            message.setType("alert-danger");
+            message.setContent("Old password does't match with Database Pass");
+            System.out.println("Old password does't match with Database Pass");
+        }
+        session.setAttribute("message",message);
+        return "redirect:/user/change_password";
     }
     
 }
